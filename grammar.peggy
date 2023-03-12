@@ -1,5 +1,5 @@
 {{
-  import { ASTGroup, ASTStage, ASTStageList, ASTArithmeticOperation } from './src/ast-types.js';
+  import { ASTGroup, ASTStage, ASTStageList, ASTArithmeticOperation } from '../src/ast-types.js';
 }}
 
 Start
