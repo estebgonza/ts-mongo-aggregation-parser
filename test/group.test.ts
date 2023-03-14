@@ -5,7 +5,7 @@ test("Group test", () => {
   const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}, avg: { $avg: "$score" }}}]`;
 
   const ast = parse(pipeline);
-  console.log(ast);
+
   const stages = ast.stages;
   expect(stages.length).toEqual(1);
 
