@@ -35,6 +35,8 @@ const ast = parse(pipeline)
 
 ## Using the AST Visitor
 
+The Visitor AST provides a good way to traverse and manipulate our custom Abstract Syntax Trees (ASTs). To use the AST visitor, simply extend the `BaseASTVisitor` class and override the methods for the specific AST node types you're interested in. Below is a brief example:
+
 ```typescript
 import {
 	ASTAggregationExpression,
