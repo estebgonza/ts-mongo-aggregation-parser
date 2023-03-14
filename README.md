@@ -90,6 +90,6 @@ ast.accept(visitor)
 
 ## Roadmap
 
-- [ ] Implement a visitor pattern
+- [x] Implement a visitor pattern
 - [ ] Support all aggregation operators
 - [ ] Support all stages
