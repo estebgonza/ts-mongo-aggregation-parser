@@ -1,5 +1,4 @@
-import { expect, test, vi } from "vitest";
-import { mock } from "vitest-mock-extended";
+import { expect, test } from "vitest";
 import {
   ASTAggregationExpression,
   ASTStageList,

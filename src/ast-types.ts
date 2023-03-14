@@ -1,5 +1,3 @@
-// AST classes
-
 export interface ASTVisitor {
   visitStageList(stageList: ASTStageList): void;
   visitStageGroup(stageGroup: ASTStageGroup): void;

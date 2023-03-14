@@ -33,7 +33,7 @@ const pipeline = `[
 const ast = parse(pipeline)
 ```
 
-## Visitor pattern usage
+## Using the AST Visitor
 
 ```typescript
 import {
