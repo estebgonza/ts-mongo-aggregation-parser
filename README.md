@@ -14,7 +14,7 @@ yarn add ts-mongo-aggregation-parser
 pnpm add ts-mongo-aggregation-parser
 ```
 
-## Usage
+## Parser usage
 
 ```typescript
 import { astTypes, parse } from 'ts-mongo-aggregation-parser'
@@ -31,6 +31,37 @@ const pipeline = `[
 ]`
 
 const ast = parse(pipeline)
+```
+
+## Visitor pattern usage
+
+```typescript
+import {
+	ASTAggregationExpression,
+	ASTField,
+	ASTProperty,
+	ASTStageGroup,
+	ASTStageList,
+	ASTVisitor,
+	BaseASTVisitor,
+} from './ts-mongo-aggregation-parser'
+
+class CustomASTVisitor extends BaseASTVisitor {
+	visitStageGroup(stageGroup: ASTStageGroup): void {
+		console.log(`StageGroup ID: ${stageGroup.id.name}`)
+	}
+
+	visitAggregationExpression(agg: ASTAggregationExpression): void {
+		console.log(`Aggregation Operator: ${agg.operator}`)
+	}
+}
+
+// Assuming you have created an AST
+const ast = new ASTStageList() /* your stages here */
+
+// Use your custom visitor
+const visitor = new CustomASTVisitor()
+ast.accept(visitor)
 ```
 
 ## Supported aggregation operators
