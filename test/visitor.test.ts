@@ -3,17 +3,13 @@ import {
   ASTAggregationExpression,
   ASTStageList,
   ASTStageGroup,
-  BaseASTVisitor,
   ASTProperty,
   ASTField,
 } from "../src/ast-types.js";
 
-test("Group test", async () => {
-  let count = 0;
-  const callbackCount = () => count++;
+import { BaseASTVisitor } from "../src/ast-visitor.js";
 
-  const print = new CountStageVisitor(callbackCount);
-
+test("Simple counter visitor on group and field", async () => {
   const ast = new ASTStageList([
     new ASTStageGroup(new ASTField("id"), [
       new ASTProperty(
@@ -23,34 +19,32 @@ test("Group test", async () => {
     ]),
   ]);
 
-  ast.accept(print);
-  expect(count).toBe(1);
-  count = 0;
+  const stageVisitorCounter = new CountStageVisitor();
+  ast.accept(stageVisitorCounter);
+  expect(stageVisitorCounter.getCount()).toBe(1);
 
-  const print2 = new CountFieldVisitor(callbackCount);
-
-  ast.accept(print2);
-  expect(count).toBe(3);
-
-  count = 0;
+  const fieldVisitorCounter = new CountFieldVisitor();
+  ast.accept(fieldVisitorCounter);
+  expect(fieldVisitorCounter.getCount()).toBe(3);
 });
 
-export class CountStageVisitor extends BaseASTVisitor {
-  constructor(private callback: () => void) {
-    super();
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  visitStageGroup(_stageGroup: ASTStageGroup): void {
-    this.callback();
+export abstract class CounterVisitor extends BaseASTVisitor {
+  protected counter = 0;
+
+  getCount(): number {
+    return this.counter;
   }
 }
 
-export class CountFieldVisitor extends BaseASTVisitor {
-  constructor(private callback: () => void) {
-    super();
+export class CountStageVisitor extends CounterVisitor {
+  visitStageList(stageList: ASTStageList): number {
+    return (this.counter += stageList.stages.length);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  visitField(_field: ASTField): void {
-    this.callback();
+}
+
+export class CountFieldVisitor extends CounterVisitor {
+  visitField(_field: ASTField): number {
+    _field; // unused
+    return (this.counter += 1);
   }
 }
