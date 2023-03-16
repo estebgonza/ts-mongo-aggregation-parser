@@ -1,5 +1,5 @@
 {{
-  import { ASTGroup, ASTStage, ASTStageList, ASTArithmeticOperation } from '../src/ast-types.js';
+  import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationExpression, ASTProperty, ASTField } from '../src/ast-types.js';
 }}
 
 Start
@@ -7,30 +7,24 @@ Start
 
 StageList
   = "[" WS stage:Stage stages:("," WS Stage)* WS "]" {
-    return {
-      type: 'StageList',
-      stages: [stage, ...stages] 
-    } as ASTStageList ;
+    return new ASTStageList([stage, ...stages]) ;
   }
 
 Stage
   = g:Group { return { ...g } as ASTStage ;}
 
 Group
-  = "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList+ WS "}" WS "}" { return {
-    type: 'Group',
-    id: id,
-    properties,
-  } as ASTGroup ;}
+  = "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList+ WS "}" WS "}" { return new ASTStageGroup(id, properties) ;
+  }
 
 Operation
   = ArithmeticOperation
   
 ArithmeticOperation
-  = "$sum" WS ":" WS field:Field WS { return { type: 'Sum', field } as ASTArithmeticOperation ;}
-  / "$avg" WS ":" WS field:Field WS { return { type: 'Avg', field } as ASTArithmeticOperation ;}
-  / "$min" WS ":" WS field:Field WS { return { type: 'Min', field } as ASTArithmeticOperation ;}
-  / "$max" WS ":" WS field:Field WS { return { type: 'Max', field } as ASTArithmeticOperation ;}
+  = "$sum" WS ":" WS field:Field WS { return new ASTAggregationExpression('Sum', field) ;}
+  / "$avg" WS ":" WS field:Field WS { return new ASTAggregationExpression('Avg', field) ;}
+  / "$min" WS ":" WS field:Field WS { return new ASTAggregationExpression('Min', field) ;}
+  / "$max" WS ":" WS field:Field WS { return new ASTAggregationExpression('Max', field) ;}
   
 
 WS "whitespace"
@@ -44,8 +38,8 @@ Ignored
   = WS / Comment
 
 Field
-  = "$" Identifier
-  / Identifier
+  = i:("$" Identifier)
+  / i:Identifier { return new ASTField(i) ;}
 
 Identifier
   = l:(Letter / "_") ls:(Letter / Digit / "_")* { return [l, ...ls].join('') ;}
@@ -62,7 +56,7 @@ Digit
   = [0-9]
 
 Property
-  = WS field:Field WS ":" WS "{" WS operation:Operation WS "}" WS { return { field, operation } ;}
+  = WS field:Field WS ":" WS "{" WS operation:Operation WS "}" WS { return new ASTProperty(field, operation) ;}
 
 PropertyList
   = property:Property properties:PropertySeparated* { return [property, ...properties] ;}

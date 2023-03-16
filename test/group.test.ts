@@ -10,8 +10,8 @@ test("Group test", () => {
   expect(stages.length).toEqual(1);
 
   const group = stages[0];
-  expect(group.type).toEqual("Group");
-  expect(group.id).toEqual("$name");
+  expect(group.type).toEqual("StageGroup");
+  expect(group.id).toEqual({ type: "Field", name: "$name" });
 
   const properties = group.properties;
   expect(properties.length).toEqual(1);
@@ -20,10 +20,18 @@ test("Group test", () => {
   expect(firstProperty.length).toEqual(2);
 
   const totalOperation = firstProperty[0];
-  expect(totalOperation.operation.type).toEqual("Sum");
-  expect(totalOperation.operation.field).toEqual("$score");
+  expect(totalOperation.operation.type).toEqual("AggregationExpression");
+  expect(totalOperation.operation.operator).toEqual("Sum");
+  expect(totalOperation.operation.field).toEqual({
+    type: "Field",
+    name: "$score",
+  });
 
   const avgOperation = firstProperty[1];
-  expect(avgOperation.operation.type).toEqual("Avg");
-  expect(avgOperation.operation.field).toEqual("$score");
+  expect(avgOperation.operation.type).toEqual("AggregationExpression");
+  expect(avgOperation.operation.operator).toEqual("Avg");
+  expect(avgOperation.operation.field).toEqual({
+    type: "Field",
+    name: "$score",
+  });
 });
