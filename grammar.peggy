@@ -6,7 +6,7 @@ Start
   = StageList
 
 StageList
-  = "[" WS stage:Stage stages:("," WS Stage)* WS "]" {
+  = WS "[" WS stage:Stage stages:("," WS Stage)* WS "]" WS {
     return new ASTStageList([stage, ...stages]) ;
   }
 
@@ -14,7 +14,7 @@ Stage
   = g:Group { return { ...g } as ASTStage ;}
 
 Group
-  = "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList+ WS "}" WS "}" { return new ASTStageGroup(id, properties) ;
+  = WS "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList+ WS "}" WS "}" WS { return new ASTStageGroup(id, properties) ;
   }
 
 Operation

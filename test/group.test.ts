@@ -35,3 +35,8 @@ test("Group test", () => {
     name: "$score",
   });
 });
+
+test("Group test with blank spaces", () => {
+  const pipeline = ` [ {    $group: {   _id:    "$name", total: { $sum: "$score"}, avg: { $avg: "$score" }   }   }   ]    `;
+  expect(() => parse(pipeline)).not.toThrow();
+});
