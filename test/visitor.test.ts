@@ -14,6 +14,39 @@ import {
 
 import { BaseASTVisitor } from "../src/ast-visitor.js";
 
+test("Simple counter of stages", async () => {
+  const ast = new ASTStageList([
+    new ASTStageGroup(new ASTField("id"), [
+      new ASTProperty(
+        new ASTField("mySummedScore"),
+        new ASTAggregationSum(new ASTField("score"))
+      ),
+      new ASTProperty(
+        new ASTField("myAveragedScore"),
+        new ASTAggregationAvg(new ASTField("score"))
+      ),
+    ]),
+  ]);
+
+  class StageCounter extends CounterVisitor {
+    private count = 0;
+
+    visitStageGroup() {
+      this.count++;
+    }
+
+    getCount() {
+      return this.count;
+    }
+  }
+
+  const stageCounter = new StageCounter();
+
+  ast.accept(stageCounter);
+
+  expect(stageCounter.getCount()).toBe(1);
+});
+
 test("Simple counter visitor on group and field", async () => {
   const ast = new ASTStageList([
     new ASTStageGroup(new ASTField("id"), [

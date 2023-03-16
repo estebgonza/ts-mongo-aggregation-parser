@@ -2,16 +2,13 @@
   import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationSum, ASTAggregationMax, ASTAggregationMin, ASTAggregationAvg, ASTProperty, ASTField } from '../src/ast-types.js';
 }}
 
-Start
-  = StageList
-
 StageList
   = WS "[" WS stage:Stage stages:("," WS Stage)* WS "]" WS {
     return new ASTStageList([stage, ...stages]) ;
   }
 
 Stage
-  = g:Group { return { ...g } as ASTStage ;}
+  = Group
 
 Group
   = WS "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList+ WS "}" WS "}" WS { return new ASTStageGroup(id, properties) ;
