@@ -6,7 +6,7 @@
 "use strict";
 
 
-  import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationExpression, ASTProperty, ASTField } from '../src/ast-types.js';
+  import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationSum, ASTAggregationMax, ASTAggregationMin, ASTAggregationAvg, ASTProperty, ASTField } from '../src/ast-types.js';
 
 
 export interface FilePosition {
@@ -238,16 +238,16 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c18 = peg$literalExpectation("$sum", false);
   const peg$c19 = ":";
   const peg$c20 = peg$literalExpectation(":", false);
-  const peg$c21 = function(field: any): any { return new ASTAggregationExpression('$sum', field) ;};
+  const peg$c21 = function(field: any): any { return new ASTAggregationSum(field) ;};
   const peg$c22 = "$avg";
   const peg$c23 = peg$literalExpectation("$avg", false);
-  const peg$c24 = function(field: any): any { return new ASTAggregationExpression('$avg', field) ;};
+  const peg$c24 = function(field: any): any { return new ASTAggregationAvg(field) ;};
   const peg$c25 = "$min";
   const peg$c26 = peg$literalExpectation("$min", false);
-  const peg$c27 = function(field: any): any { return new ASTAggregationExpression('$min', field) ;};
+  const peg$c27 = function(field: any): any { return new ASTAggregationMin(field) ;};
   const peg$c28 = "$max";
   const peg$c29 = peg$literalExpectation("$max", false);
-  const peg$c30 = function(field: any): any { return new ASTAggregationExpression('$max', field) ;};
+  const peg$c30 = function(field: any): any { return new ASTAggregationMax(field) ;};
   const peg$c31 = peg$otherExpectation("whitespace");
   const peg$c32 = /^[ \t\n\r]/;
   const peg$c33 = peg$classExpectation([" ", "\t", "\n", "\r"], false, false);

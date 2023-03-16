@@ -1,5 +1,5 @@
 {{
-  import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationExpression, ASTProperty, ASTField } from '../src/ast-types.js';
+  import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationSum, ASTAggregationMax, ASTAggregationMin, ASTAggregationAvg, ASTProperty, ASTField } from '../src/ast-types.js';
 }}
 
 Start
@@ -21,10 +21,10 @@ Operation
   = ArithmeticOperation
   
 ArithmeticOperation
-  = "$sum" WS ":" WS field:Field WS { return new ASTAggregationExpression('$sum', field) ;}
-  / "$avg" WS ":" WS field:Field WS { return new ASTAggregationExpression('$avg', field) ;}
-  / "$min" WS ":" WS field:Field WS { return new ASTAggregationExpression('$min', field) ;}
-  / "$max" WS ":" WS field:Field WS { return new ASTAggregationExpression('$max', field) ;}
+  = "$sum" WS ":" WS field:Field WS { return new ASTAggregationSum(field) ;}
+  / "$avg" WS ":" WS field:Field WS { return new ASTAggregationAvg(field) ;}
+  / "$min" WS ":" WS field:Field WS { return new ASTAggregationMin(field) ;}
+  / "$max" WS ":" WS field:Field WS { return new ASTAggregationMax(field) ;}
   
 
 WS "whitespace"
