@@ -21,7 +21,7 @@ test("Group test", () => {
 
   const totalOperation = firstProperty[0];
   expect(totalOperation.operation.type).toEqual("AggregationExpression");
-  expect(totalOperation.operation.operator).toEqual("Sum");
+  expect(totalOperation.operation.operator).toEqual("$sum");
   expect(totalOperation.operation.field).toEqual({
     type: "Field",
     name: "$score",
@@ -29,7 +29,7 @@ test("Group test", () => {
 
   const avgOperation = firstProperty[1];
   expect(avgOperation.operation.type).toEqual("AggregationExpression");
-  expect(avgOperation.operation.operator).toEqual("Avg");
+  expect(avgOperation.operation.operator).toEqual("$avg");
   expect(avgOperation.operation.field).toEqual({
     type: "Field",
     name: "$score",

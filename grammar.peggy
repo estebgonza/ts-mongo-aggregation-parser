@@ -21,10 +21,10 @@ Operation
   = ArithmeticOperation
   
 ArithmeticOperation
-  = "$sum" WS ":" WS field:Field WS { return new ASTAggregationExpression('Sum', field) ;}
-  / "$avg" WS ":" WS field:Field WS { return new ASTAggregationExpression('Avg', field) ;}
-  / "$min" WS ":" WS field:Field WS { return new ASTAggregationExpression('Min', field) ;}
-  / "$max" WS ":" WS field:Field WS { return new ASTAggregationExpression('Max', field) ;}
+  = "$sum" WS ":" WS field:Field WS { return new ASTAggregationExpression('$sum', field) ;}
+  / "$avg" WS ":" WS field:Field WS { return new ASTAggregationExpression('$avg', field) ;}
+  / "$min" WS ":" WS field:Field WS { return new ASTAggregationExpression('$min', field) ;}
+  / "$max" WS ":" WS field:Field WS { return new ASTAggregationExpression('$max', field) ;}
   
 
 WS "whitespace"
