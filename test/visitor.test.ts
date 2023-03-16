@@ -1,6 +1,5 @@
 import {
   ASTAggregationAvg,
-  ASTAggregationExpression,
   ASTAggregationMax,
   ASTAggregationMin,
 } from "./../src/ast-types";
