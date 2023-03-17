@@ -3,12 +3,15 @@
 }}
 
 StageList
-  = WS "[" WS stage:Stage stages:("," WS Stage)* WS "]" WS {
+  = WS "[" WS stage:Stage stages:StageSeparated* WS "]" WS {
     return new ASTStageList([stage, ...stages]) ;
   }
 
 Stage
   = Group
+
+StageSeparated
+  = WS "," WS stage:Stage WS { return stage ;}
 
 Group
   = WS "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList+ WS "}" WS "}" WS { return new ASTStageGroup(id, properties) ;

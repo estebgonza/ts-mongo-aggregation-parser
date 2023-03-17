@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
 import { parse } from "../generated/mongo-aggregation-parser.js";
+import { ASTStageList } from "../src/ast-types.js";
 
 test("Group test", () => {
   const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}, avg: { $avg: "$score" }}}]`;
@@ -39,4 +40,15 @@ test("Group test", () => {
 test("Group test with blank spaces", () => {
   const pipeline = ` [ {    $group: {   _id:    "$name", total: { $sum: "$score"}, avg: { $avg: "$score" }   }   }   ]    `;
   expect(() => parse(pipeline)).not.toThrow();
+});
+
+test("Multiple stages separated", () => {
+  const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}}},{$group:{_id:"$name", total: { $sum: "$score"}}}, {$group:{_id:"$name", total: { $sum: "$score"}}}]`;
+  const stageList = parse(pipeline) as ASTStageList;
+  expect(stageList.stages.length).toEqual(3);
+  // If the parser is working correctly, the accept method should be defined
+  // It means stages are instances of ASTStage and not strings or random objects
+  expect(stageList.stages[0].accept).toBeDefined();
+  expect(stageList.stages[1].accept).toBeDefined();
+  expect(stageList.stages[2].accept).toBeDefined();
 });
