@@ -35,7 +35,7 @@ export class ASTStageGroup implements ASTNode {
   }
 }
 
-type AggregationOperator = "$sum" | "$avg" | "$min" | "$max";
+type AggregationOperator = "sum" | "avg" | "min" | "max";
 
 export abstract class ASTAggregationExpression implements ASTNode {
   type = "AggregationExpression";
@@ -54,25 +54,25 @@ export abstract class ASTAggregationExpression implements ASTNode {
 
 export class ASTAggregationSum extends ASTAggregationExpression {
   constructor(field: ASTField) {
-    super("$sum", field);
+    super("sum", field);
   }
 }
 
 export class ASTAggregationAvg extends ASTAggregationExpression {
   constructor(field: ASTField) {
-    super("$avg", field);
+    super("avg", field);
   }
 }
 
 export class ASTAggregationMin extends ASTAggregationExpression {
   constructor(field: ASTField) {
-    super("$min", field);
+    super("min", field);
   }
 }
 
 export class ASTAggregationMax extends ASTAggregationExpression {
   constructor(field: ASTField) {
-    super("$max", field);
+    super("max", field);
   }
 }
 
