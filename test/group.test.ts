@@ -15,26 +15,22 @@ test("Group test", () => {
   expect(group.id).toEqual({ type: "Field", name: "$name" });
 
   const properties = group.properties;
-  expect(properties.length).toEqual(1);
+  expect(properties.length).toEqual(2);
 
-  const firstProperty = properties[0];
-  expect(firstProperty.length).toEqual(2);
+  const total = properties[0];
+  console.log(total);
+  expect(total.type).toEqual("Property");
+  expect(total.field.name).toEqual("total");
+  expect(total.operation.type).toEqual("AggregationExpression");
+  expect(total.operation.field.type).toEqual("Field");
+  expect(total.operation.field.name).toEqual("$score");
 
-  const totalOperation = firstProperty[0];
-  expect(totalOperation.operation.type).toEqual("AggregationExpression");
-  expect(totalOperation.operation.operator).toEqual("sum");
-  expect(totalOperation.operation.field).toEqual({
-    type: "Field",
-    name: "$score",
-  });
-
-  const avgOperation = firstProperty[1];
-  expect(avgOperation.operation.type).toEqual("AggregationExpression");
-  expect(avgOperation.operation.operator).toEqual("avg");
-  expect(avgOperation.operation.field).toEqual({
-    type: "Field",
-    name: "$score",
-  });
+  const avg = properties[1];
+  expect(avg.type).toEqual("Property");
+  expect(avg.field.name).toEqual("avg");
+  expect(avg.operation.type).toEqual("AggregationExpression");
+  expect(avg.operation.field.type).toEqual("Field");
+  expect(avg.operation.field.name).toEqual("$score");
 });
 
 test("Group test with blank spaces", () => {
@@ -51,4 +47,14 @@ test("Multiple stages separated", () => {
   expect(stageList.stages[0].accept).toBeDefined();
   expect(stageList.stages[1].accept).toBeDefined();
   expect(stageList.stages[2].accept).toBeDefined();
+});
+
+test("Multiple properties", () => {
+  const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}, avg: { $avg: "$score" }}}]`;
+  const stageList = parse(pipeline) as ASTStageList;
+  expect(stageList.stages.length).toEqual(1);
+  const group = stageList.stages[0];
+  expect(group.properties.length).toEqual(2);
+  expect(group.properties[0].operation.field.name).toEqual("$score");
+  expect(group.properties[1].operation.field.name).toEqual("$score");
 });

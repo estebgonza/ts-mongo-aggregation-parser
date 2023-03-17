@@ -614,16 +614,7 @@ function peg$parse(input: string, options?: ParseOptions) {
                           if (s12 as any !== peg$FAILED) {
                             s13 = peg$parseWS();
                             if (s13 as any !== peg$FAILED) {
-                              s14 = [];
-                              s15 = peg$parsePropertyList();
-                              if (s15 as any !== peg$FAILED) {
-                                while (s15 as any !== peg$FAILED) {
-                                  s14.push(s15);
-                                  s15 = peg$parsePropertyList();
-                                }
-                              } else {
-                                s14 = peg$FAILED;
-                              }
+                              s14 = peg$parsePropertyList();
                               if (s14 as any !== peg$FAILED) {
                                 s15 = peg$parseWS();
                                 if (s15 as any !== peg$FAILED) {

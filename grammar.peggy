@@ -14,7 +14,7 @@ StageSeparated
   = WS "," WS stage:Stage WS { return stage ;}
 
 Group
-  = WS "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList+ WS "}" WS "}" WS { return new ASTStageGroup(id, properties) ;
+  = WS "{" WS "$group:" WS "{" WS "_id:" WS id:Field WS "," WS properties:PropertyList WS "}" WS "}" WS { return new ASTStageGroup(id, properties) ;
   }
 
 Operation
