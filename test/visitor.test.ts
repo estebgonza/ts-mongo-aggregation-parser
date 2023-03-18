@@ -2,6 +2,7 @@ import {
   ASTAggregationAvg,
   ASTAggregationMax,
   ASTAggregationMin,
+  ASTOutputFieldName,
 } from "./../src/ast-types";
 import { expect, test } from "vitest";
 import {
@@ -9,21 +10,21 @@ import {
   ASTStageList,
   ASTStageGroup,
   ASTProperty,
-  ASTField,
+  ASTReferenceField,
 } from "../src/ast-types.js";
 
 import { BaseASTVisitor } from "../src/ast-visitor.js";
 
 test("Simple counter of stages", async () => {
   const ast = new ASTStageList([
-    new ASTStageGroup(new ASTField("id"), [
+    new ASTStageGroup(new ASTReferenceField("id"), [
       new ASTProperty(
-        new ASTField("mySummedScore"),
-        new ASTAggregationSum(new ASTField("score"))
+        new ASTOutputFieldName("mySummedScore"),
+        new ASTAggregationSum(new ASTReferenceField("score"))
       ),
       new ASTProperty(
-        new ASTField("myAveragedScore"),
-        new ASTAggregationAvg(new ASTField("score"))
+        new ASTOutputFieldName("myAveragedScore"),
+        new ASTAggregationAvg(new ASTReferenceField("score"))
       ),
     ]),
   ]);
@@ -49,29 +50,29 @@ test("Simple counter of stages", async () => {
 
 test("Simple counter visitor on group and field", async () => {
   const ast = new ASTStageList([
-    new ASTStageGroup(new ASTField("id"), [
+    new ASTStageGroup(new ASTReferenceField("id"), [
       new ASTProperty(
-        new ASTField("mySummedScore"),
-        new ASTAggregationSum(new ASTField("score"))
+        new ASTOutputFieldName("mySummedScore"),
+        new ASTAggregationSum(new ASTReferenceField("score"))
       ),
       new ASTProperty(
-        new ASTField("myAveragedScore"),
-        new ASTAggregationAvg(new ASTField("score"))
-      ),
-
-      new ASTProperty(
-        new ASTField("myMaxScore"),
-        new ASTAggregationMax(new ASTField("score"))
+        new ASTOutputFieldName("myAveragedScore"),
+        new ASTAggregationAvg(new ASTReferenceField("score"))
       ),
 
       new ASTProperty(
-        new ASTField("myMinScore"),
-        new ASTAggregationMin(new ASTField("score"))
+        new ASTOutputFieldName("myMaxScore"),
+        new ASTAggregationMax(new ASTReferenceField("score"))
       ),
 
       new ASTProperty(
-        new ASTField("myMinScore2"),
-        new ASTAggregationMin(new ASTField("score"))
+        new ASTOutputFieldName("myMinScore"),
+        new ASTAggregationMin(new ASTReferenceField("score"))
+      ),
+
+      new ASTProperty(
+        new ASTOutputFieldName("myMinScore2"),
+        new ASTAggregationMin(new ASTReferenceField("score"))
       ),
     ]),
   ]);
@@ -108,7 +109,11 @@ export class StageCounter extends CounterVisitor {
 }
 
 export class FieldCounter extends CounterVisitor {
-  visitField(): void {
+  visitReferenceField(): void {
+    ++this.counter;
+  }
+
+  visitOutputFieldName(): void {
     ++this.counter;
   }
 }

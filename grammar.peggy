@@ -1,5 +1,5 @@
 {{
-  import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationSum, ASTAggregationMax, ASTAggregationMin, ASTAggregationAvg, ASTProperty, ASTField } from '../src/ast-types.js';
+  import { ASTStageGroup, ASTStage, ASTStageList, ASTAggregationSum, ASTAggregationMax, ASTAggregationMin, ASTAggregationAvg, ASTProperty, ASTReferenceField, ASTOutputFieldName } from '../src/ast-types.js';
 }}
 
 StageList
@@ -21,10 +21,10 @@ Operation
   = ArithmeticOperation
   
 ArithmeticOperation
-  = "$sum" WS ":" WS field:Field WS { return new ASTAggregationSum(field) ;}
-  / "$avg" WS ":" WS field:Field WS { return new ASTAggregationAvg(field) ;}
-  / "$min" WS ":" WS field:Field WS { return new ASTAggregationMin(field) ;}
-  / "$max" WS ":" WS field:Field WS { return new ASTAggregationMax(field) ;}
+  = "$sum" WS ":" WS field:ReferenceField WS { return new ASTAggregationSum(field) ;}
+  / "$avg" WS ":" WS field:ReferenceField WS { return new ASTAggregationAvg(field) ;}
+  / "$min" WS ":" WS field:ReferenceField WS { return new ASTAggregationMin(field) ;}
+  / "$max" WS ":" WS field:ReferenceField WS { return new ASTAggregationMax(field) ;}
   
 
 WS "whitespace"
@@ -37,9 +37,11 @@ Comment
 Ignored
   = WS / Comment
 
+ReferenceField
+  = f:Identifier { return new ASTReferenceField(f) ;}
+
 Field
-  = i:("$" Identifier)
-  / i:Identifier { return new ASTField(i) ;}
+  = i:Identifier { return new ASTOutputFieldName(i) ;}
 
 Identifier
   = l:(Letter / "_") ls:(Letter / Digit / "_")* { return [l, ...ls].join('') ;}

@@ -3,7 +3,7 @@ import { parse } from "../generated/mongo-aggregation-parser.js";
 import { ASTStageList } from "../src/ast-types.js";
 
 test("Group test", () => {
-  const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}, avg: { $avg: "$score" }}}]`;
+  const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}, myAvg: { $avg: "$score" }}}]`;
 
   const ast = parse(pipeline);
 
@@ -11,25 +11,26 @@ test("Group test", () => {
   expect(stages.length).toEqual(1);
 
   const group = stages[0];
-  expect(group.type).toEqual("StageGroup");
-  expect(group.id).toEqual({ type: "Field", name: "$name" });
+  expect(group.type).toEqual("stage-group");
+  expect(group.id).toEqual({ type: "output-field-name", name: "$name" });
 
   const properties = group.properties;
   expect(properties.length).toEqual(2);
 
   const total = properties[0];
   console.log(total);
-  expect(total.type).toEqual("Property");
+  expect(total.type).toEqual("property");
   expect(total.field.name).toEqual("total");
-  expect(total.operation.type).toEqual("AggregationExpression");
-  expect(total.operation.field.type).toEqual("Field");
+  expect(total.operation.type).toEqual("aggregation-expression");
+  expect(total.operation.field.type).toEqual("reference-field");
   expect(total.operation.field.name).toEqual("$score");
 
   const avg = properties[1];
-  expect(avg.type).toEqual("Property");
-  expect(avg.field.name).toEqual("avg");
-  expect(avg.operation.type).toEqual("AggregationExpression");
-  expect(avg.operation.field.type).toEqual("Field");
+  expect(avg.type).toEqual("property");
+  expect(avg.field.name).toEqual("myAvg");
+  expect(avg.field.type).toEqual("output-field-name");
+  expect(avg.operation.type).toEqual("aggregation-expression");
+  expect(avg.operation.field.type).toEqual("reference-field");
   expect(avg.operation.field.name).toEqual("$score");
 });
 

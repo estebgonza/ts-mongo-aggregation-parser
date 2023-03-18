@@ -2,16 +2,18 @@ import {
   ASTStageList,
   ASTStageGroup,
   ASTAggregationExpression,
-  ASTField,
+  ASTReferenceField,
   ASTProperty,
   ASTNode,
+  ASTOutputFieldName,
 } from "./ast-types.js";
 
 export interface ASTVisitor {
   visitStageList(stageList: ASTStageList): void;
   visitStageGroup(stageGroup: ASTStageGroup): void;
   visitAggregationExpression(agg: ASTAggregationExpression): void;
-  visitField(field: ASTField): void;
+  visitReferenceField(field: ASTReferenceField): void;
+  visitOutputFieldName(field: ASTOutputFieldName): void;
   visitProperty(property: ASTProperty): void;
 }
 
@@ -29,8 +31,11 @@ export abstract class BaseASTVisitor implements ASTVisitor {
           node as ASTAggregationExpression
         );
       }
-      case "Field": {
-        return this.visitField(node as ASTField);
+      case "ReferenceField": {
+        return this.visitReferenceField(node as ASTReferenceField);
+      }
+      case "OutputFieldName": {
+        return this.visitOutputFieldName(node as ASTOutputFieldName);
       }
       case "Property": {
         return this.visitProperty(node as ASTProperty);
@@ -56,7 +61,11 @@ export abstract class BaseASTVisitor implements ASTVisitor {
     aggregationExpression.field.accept(this);
   }
 
-  visitField(_field: ASTField): void {
+  visitReferenceField(_field: ASTReferenceField): void {
+    _field; // unused
+  }
+
+  visitOutputFieldName(_field: ASTOutputFieldName): void {
     _field; // unused
   }
 

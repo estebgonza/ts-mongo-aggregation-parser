@@ -6,7 +6,7 @@ export interface ASTNode {
 }
 
 export class ASTStageList implements ASTNode {
-  type = "StageList";
+  type = "stage-list";
   stages: ASTStage[] = [];
 
   constructor(stages: ASTStage[]) {
@@ -21,11 +21,11 @@ export class ASTStageList implements ASTNode {
 export type ASTStage = ASTStageGroup;
 
 export class ASTStageGroup implements ASTNode {
-  type = "StageGroup";
-  id: ASTField;
+  type = "stage-group";
+  id: ASTReferenceField;
   properties: ASTProperty[];
 
-  constructor(id: ASTField, properties: ASTProperty[]) {
+  constructor(id: ASTReferenceField, properties: ASTProperty[]) {
     this.id = id;
     this.properties = properties;
   }
@@ -38,11 +38,11 @@ export class ASTStageGroup implements ASTNode {
 type AggregationOperator = "sum" | "avg" | "min" | "max";
 
 export abstract class ASTAggregationExpression implements ASTNode {
-  type = "AggregationExpression";
+  type = "aggregation-expression";
   operator: AggregationOperator;
-  field: ASTField;
+  field: ASTReferenceField;
 
-  constructor(operator: AggregationOperator, field: ASTField) {
+  constructor(operator: AggregationOperator, field: ASTReferenceField) {
     this.operator = operator;
     this.field = field;
   }
@@ -53,33 +53,33 @@ export abstract class ASTAggregationExpression implements ASTNode {
 }
 
 export class ASTAggregationSum extends ASTAggregationExpression {
-  constructor(field: ASTField) {
+  constructor(field: ASTReferenceField) {
     super("sum", field);
   }
 }
 
 export class ASTAggregationAvg extends ASTAggregationExpression {
-  constructor(field: ASTField) {
+  constructor(field: ASTReferenceField) {
     super("avg", field);
   }
 }
 
 export class ASTAggregationMin extends ASTAggregationExpression {
-  constructor(field: ASTField) {
+  constructor(field: ASTReferenceField) {
     super("min", field);
   }
 }
 
 export class ASTAggregationMax extends ASTAggregationExpression {
-  constructor(field: ASTField) {
+  constructor(field: ASTReferenceField) {
     super("max", field);
   }
 }
 
 export type ASTOperation = ASTAggregationExpression;
 
-export class ASTField implements ASTNode {
-  type = "Field";
+export class ASTReferenceField implements ASTNode {
+  type = "reference-field";
   name: string;
 
   constructor(name: string) {
@@ -87,16 +87,28 @@ export class ASTField implements ASTNode {
   }
 
   accept(visitor: ASTVisitor): void {
-    return visitor.visitField(this);
+    return visitor.visitReferenceField(this);
   }
 }
 
+export class ASTOutputFieldName implements ASTNode {
+  type = "output-field-name";
+  name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  accept(visitor: ASTVisitor): void {
+    return visitor.visitOutputFieldName(this);
+  }
+}
 export class ASTProperty implements ASTNode {
-  type = "Property";
-  field: ASTField;
+  type = "property";
+  field: ASTOutputFieldName;
   operation: ASTOperation;
 
-  constructor(field: ASTField, operation: ASTOperation) {
+  constructor(field: ASTOutputFieldName, operation: ASTOperation) {
     this.field = field;
     this.operation = operation;
   }
