@@ -12,7 +12,7 @@ test("Group test", () => {
 
   const group = stages[0];
   expect(group.type).toEqual("stage-group");
-  expect(group.id).toEqual({ type: "output-field-name", name: "$name" });
+  expect(group.id).toEqual({ type: "reference-field", name: "name" });
 
   const properties = group.properties;
   expect(properties.length).toEqual(2);
@@ -23,7 +23,7 @@ test("Group test", () => {
   expect(total.field.name).toEqual("total");
   expect(total.operation.type).toEqual("aggregation-expression");
   expect(total.operation.field.type).toEqual("reference-field");
-  expect(total.operation.field.name).toEqual("$score");
+  expect(total.operation.field.name).toEqual("score");
 
   const avg = properties[1];
   expect(avg.type).toEqual("property");
@@ -31,7 +31,7 @@ test("Group test", () => {
   expect(avg.field.type).toEqual("output-field-name");
   expect(avg.operation.type).toEqual("aggregation-expression");
   expect(avg.operation.field.type).toEqual("reference-field");
-  expect(avg.operation.field.name).toEqual("$score");
+  expect(avg.operation.field.name).toEqual("score");
 });
 
 test("Group test with blank spaces", () => {
@@ -56,6 +56,6 @@ test("Multiple properties", () => {
   expect(stageList.stages.length).toEqual(1);
   const group = stageList.stages[0];
   expect(group.properties.length).toEqual(2);
-  expect(group.properties[0].operation.field.name).toEqual("$score");
-  expect(group.properties[1].operation.field.name).toEqual("$score");
+  expect(group.properties[0].operation.field.name).toEqual("score");
+  expect(group.properties[1].operation.field.name).toEqual("score");
 });

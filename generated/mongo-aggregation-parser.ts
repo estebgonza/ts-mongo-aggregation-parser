@@ -265,7 +265,7 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c45 = peg$literalExpectation("//", false);
   const peg$c46 = /^[^\n]/;
   const peg$c47 = peg$classExpectation(["\n"], true, false);
-  const peg$c48 = function(f: any): any { return new ASTReferenceField(f) ;};
+  const peg$c48 = function(f: any): any { return new ASTReferenceField(f.replace("$", "")) ;};
   const peg$c49 = function(i: any): any { return new ASTOutputFieldName(i) ;};
   const peg$c50 = "_";
   const peg$c51 = peg$literalExpectation("_", false);
@@ -599,7 +599,7 @@ function peg$parse(input: string, options?: ParseOptions) {
                   if (s8 as any !== peg$FAILED) {
                     s9 = peg$parseWS();
                     if (s9 as any !== peg$FAILED) {
-                      s10 = peg$parseField();
+                      s10 = peg$parseReferenceField();
                       if (s10 as any !== peg$FAILED) {
                         s11 = peg$parseWS();
                         if (s11 as any !== peg$FAILED) {
