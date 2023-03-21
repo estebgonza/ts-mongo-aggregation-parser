@@ -18,7 +18,6 @@ test("Group test", () => {
   expect(properties.length).toEqual(2);
 
   const total = properties[0];
-  console.log(total);
   expect(total.type).toEqual("property");
   expect(total.field.name).toEqual("total");
   expect(total.operation.type).toEqual("aggregation-expression");
