@@ -75,12 +75,6 @@ test("Limit stage", () => {
 
 test("Group test with one accumulator 2", () => {
   const pipeline = `[ { $group: { _id: "$name", mySum: { $sum: ["$age","$yes"] } } } ]`;
-  console.log(JSON.stringify(parse(pipeline)));
-  console.log(JSON.stringify(parse(pipeline)));
-  console.log(JSON.stringify(parse(pipeline)));
-  console.log(JSON.stringify(parse(pipeline)));
-  console.log(JSON.stringify(parse(pipeline)));
-  console.log(JSON.stringify(parse(pipeline)));
   expect(parse(pipeline)).toBeDefined();
 });
 
