@@ -29,7 +29,7 @@ fieldCondition
   = outputFieldName:outputField ws  ":" ws  "{" ws  expression:expression ws  "}" ws  { return { outputField: outputFieldName, ...expression }; }
 
 matchStage
-  = "{" ws ":" ws conditions:matchCondition ws "}" { return { conditions }; }
+  = "{" ws "$and" ws ":" ws conditions:matchCondition ws "}" { return { type: "match", conditions }; }
 
 limitStage
   = limit:number { return { limit }; }
@@ -53,7 +53,7 @@ expressionOperator
   = "add"i / "subtract"i / "multiply"i / "divide"i / "toUpper"i / "toLower"i / "cond"i / "gte"i
 
 fieldReference
-  = '"'? '$' chars:[^"]* '"'? { return { field: chars.join('') } }
+  = '"$' chars:[^"]* '"' { return { field: chars.join('') } }
   / identifier
 
 outputField

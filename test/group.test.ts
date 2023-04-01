@@ -1,6 +1,5 @@
 import { expect, test } from "vitest";
 import { parse } from "../generated/mongo-aggregation-parser.js";
-import { ASTStageList } from "../src/ast-types.js";
 
 // test("Group test", () => {
 //   const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}, myAvg: { $avg: "$score" }}}]`;
@@ -58,43 +57,38 @@ test("Limit stage", () => {
   expect(parse(pipeline)).toBeDefined();
 });
 
-// test("Match stage with simple condition", () => {
-//   const pipeline = `[ { $match: { $age: { $gte: 18 } } } ]`;
-//   expect(parse(pipeline)).toBeDefined();
-// });
-
-// test("Match stage with multiple conditions", () => {
-//   const pipeline = `[ { $match: { $and: [ { age: { $gte: 18 } }, { country: "USA" } ] } } ]`;
-//   expect(parse(pipeline)).toBeDefined();
-// });
-
-// test("Mixed stages in pipeline", () => {
-//   const pipeline = `[ { $match: { age: { $gte: 18 } } }, { $group: { _id: "$country", averageAge: { $avg: "$age" } } }, { $limit: 5 } ]`;
-//   expect(parse(pipeline)).toBeDefined();
-// });
-
-test("Group test with one accumulator 2", () => {
-  const pipeline = `[ { $group: { _id: "$name", mySum: { $sum: ["$age","$yes"] } } } ]`;
+test("Group with different field reference formats", () => {
+  const pipeline = `[ { $group: { _id: "$name", total: { $sum: "$age" }, min: { $min: "$nested.field" } } } ]`;
   expect(parse(pipeline)).toBeDefined();
 });
 
-// test("Multiple stages separated", () => {
-//   const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}}},{$group:{_id:"$name", total: { $sum: "$score"}}}, {$group:{_id:"$name", total: { $sum: "$score"}}}]`;
-//   const stageList = parse(pipeline) as ASTStageList;
-//   expect(stageList.stages.length).toEqual(3);
-//   // If the parser is working correctly, the accept method should be defined
-//   // It means stages are instances of ASTStage and not strings or random objects
-//   expect(stageList.stages[0].accept).toBeDefined();
-//   expect(stageList.stages[1].accept).toBeDefined();
-//   expect(stageList.stages[2].accept).toBeDefined();
-// });
+test("Group with expression in accumulator", () => {
+  const pipeline = `[ { $group: { _id: "$country", salarySum: { $sum: { $multiply: ["$salary", "$exchangeRate"] } } } } ]`;
+  expect(parse(pipeline)).toBeDefined();
+});
 
-// test("Multiple properties", () => {
-//   const pipeline = `[{$group:{_id:"$name", total: { $sum: "$score"}, avg: { $avg: "$score" }}}]`;
-//   const stageList = parse(pipeline) as ASTStageList;
-//   expect(stageList.stages.length).toEqual(1);
-//   const group = stageList.stages[0];
-//   expect(group.properties.length).toEqual(2);
-//   expect(group.properties[0].operation.field.name).toEqual("score");
-//   expect(group.properties[1].operation.field.name).toEqual("score");
+test("Group with multiple accumulators and nested expressions", () => {
+  const pipeline = `[ { $group: { _id: "$country", totalAge: { $sum: "$age" }, averageSalary: { $avg: { $add: ["$salary", "$bonus"] } } } } ]`;
+  expect(parse(pipeline)).toBeDefined();
+});
+
+test("Group with no whitespace", () => {
+  const pipeline = `[{ $group: { _id: "$name", mySum: { $sum: "$age" } } }]`;
+  expect(parse(pipeline)).toBeDefined();
+});
+
+test("Group with nested expressions in accumulator", () => {
+  const pipeline = `[ { $group: { _id: "$category", weightedAverage: { $sum: { $multiply: ["$price", "$quantity"] } } } } ]`;
+  expect(parse(pipeline)).toBeDefined();
+});
+
+test("Group with numeric values as decimals and scientific notation", () => {
+  const pipeline = `[ { $group: { _id: "$category", total: { $sum: 1.23e-4 } } } ]`;
+  expect(parse(pipeline)).toBeDefined();
+});
+
+// Not supported yet
+// test("Group with nested fields in _id field", () => {
+//   const pipeline = `[ { $group: { _id: { year: "$year", month: "$month" }, total: { $sum: 1 } } } ]`;
+//   expect(parse(pipeline)).toBeDefined();
 // });
