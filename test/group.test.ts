@@ -38,13 +38,48 @@ test("Group test with blank spaces", () => {
   expect(parse(pipeline)).toBeDefined();
 });
 
-test("Group test with one accumulator", () => {
+test("Group with simple sum accumulator", () => {
   const pipeline = `[ { $group: { _id: "$name", mySum: { $sum: "$age" } } } ]`;
   expect(parse(pipeline)).toBeDefined();
 });
 
+test("Group with multiple accumulators", () => {
+  const pipeline = `[ { $group: { _id: "$country", totalPopulation: { $sum: 1 }, averageAge: { $avg: "$age" } } } ]`;
+  expect(parse(pipeline)).toBeDefined();
+});
+
+test("Group with complex accumulator", () => {
+  const pipeline = `[ { $group: { _id: "$gender", totalSalary: { $sum: { $cond: [ { $gte: [ "$salary", 0 ] }, "$salary", 0 ] } } } } ]`;
+  expect(parse(pipeline)).toBeDefined();
+});
+
+test("Limit stage", () => {
+  const pipeline = `[ { $limit: 10 } ]`;
+  expect(parse(pipeline)).toBeDefined();
+});
+
+// test("Match stage with simple condition", () => {
+//   const pipeline = `[ { $match: { $age: { $gte: 18 } } } ]`;
+//   expect(parse(pipeline)).toBeDefined();
+// });
+
+// test("Match stage with multiple conditions", () => {
+//   const pipeline = `[ { $match: { $and: [ { age: { $gte: 18 } }, { country: "USA" } ] } } ]`;
+//   expect(parse(pipeline)).toBeDefined();
+// });
+
+// test("Mixed stages in pipeline", () => {
+//   const pipeline = `[ { $match: { age: { $gte: 18 } } }, { $group: { _id: "$country", averageAge: { $avg: "$age" } } }, { $limit: 5 } ]`;
+//   expect(parse(pipeline)).toBeDefined();
+// });
+
 test("Group test with one accumulator 2", () => {
   const pipeline = `[ { $group: { _id: "$name", mySum: { $sum: ["$age","$yes"] } } } ]`;
+  console.log(JSON.stringify(parse(pipeline)));
+  console.log(JSON.stringify(parse(pipeline)));
+  console.log(JSON.stringify(parse(pipeline)));
+  console.log(JSON.stringify(parse(pipeline)));
+  console.log(JSON.stringify(parse(pipeline)));
   console.log(JSON.stringify(parse(pipeline)));
   expect(parse(pipeline)).toBeDefined();
 });
