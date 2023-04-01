@@ -2,11 +2,11 @@ lockfileVersion: '6.0'
 
 dependencies:
   peggy:
-    specifier: ^3.0.1
-    version: 3.0.1
+    specifier: ^3.0.2
+    version: 3.0.2
   ts-pegjs:
     specifier: ^3.1.0
-    version: 3.1.0(peggy@3.0.1)
+    version: 3.1.0(peggy@3.0.2)
 
 devDependencies:
   '@sachinraja/eslint-config':
@@ -37,8 +37,8 @@ devDependencies:
     specifier: 0.25.1
     version: 0.25.1
   vitest-mock-extended:
-    specifier: ^1.1.0
-    version: 1.1.0(typescript@4.8.4)(vitest@0.25.1)
+    specifier: ^1.1.3
+    version: 1.1.3(typescript@4.8.4)(vitest@0.25.1)
 
 packages:
 
@@ -1898,8 +1898,8 @@ packages:
     resolution: {integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==}
     dev: true
 
-  /peggy@3.0.1:
-    resolution: {integrity: sha512-opG0pnfH5ZQvlqz8Ozmk1SvIer9Rz6op0nDSkVQ4kQnVL0+KOKtIocoidxOgpLoS82r+ZW8J16FjhL3rhH/MpA==}
+  /peggy@3.0.2:
+    resolution: {integrity: sha512-n7chtCbEoGYRwZZ0i/O3t1cPr6o+d9Xx4Zwy2LYfzv0vjchMBU0tO+qYYyvZloBPcgRgzYvALzGWHe609JjEpg==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
@@ -2365,13 +2365,13 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-pegjs@3.1.0(peggy@3.0.1):
+  /ts-pegjs@3.1.0(peggy@3.0.2):
     resolution: {integrity: sha512-CZ80MYdzoh/setHAcrOdWh7ws4GsIPAahFEZ1019xPLe2snSzwuCLDAwQ0r7xHLIuOuRJ7v87jvz/Lr5YTLN4g==}
     hasBin: true
     peerDependencies:
       peggy: ^2.0.1
     dependencies:
-      peggy: 3.0.1
+      peggy: 3.0.2
     dev: false
 
   /tslib@1.14.1:
@@ -2521,10 +2521,10 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest-mock-extended@1.1.0(typescript@4.8.4)(vitest@0.25.1):
-    resolution: {integrity: sha512-4AMVDXmbBd7kImh1Hi2B0EBuDy6hTy+8r4CVEcpEsmlVmxjHB2vszr/6B1W6ONYw76RLhlLDJlmk9fOE5B9H8w==}
+  /vitest-mock-extended@1.1.3(typescript@4.8.4)(vitest@0.25.1):
+    resolution: {integrity: sha512-MiaKYZbTg+fjozKnCpoTTva0BnlSNYyk4jiPuM2xVhg4aou112QIrALdH3/ZKK6qfXWh0A17gFIjWJjylOlXxg==}
     peerDependencies:
-      typescript: 3.x || 4.x
+      typescript: 3.x || 4.x || 5.x
       vitest: '>=0.29.2'
     dependencies:
       ts-essentials: 9.3.1(typescript@4.8.4)
