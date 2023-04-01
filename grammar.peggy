@@ -2,7 +2,7 @@ start
   = "[" ws stage:stage (ws "," ws stage)* ws "]" { return [stage]; }
 
 stage
-  = ws  "{" ws  "$" type:("group"i / "match"i / "limit"i) ws  ":" ws  stage:(groupStage / matchStage / limitStage) ws  "}" { return {type, ...stage}; }
+  = ws  "{" ws  "$" type:("group"i / "match"i) ws  ":" ws  stage:(groupStage / matchStage) ws  "}" { return {type, ...stage}; }
 
 groupStage
   = "{" ws  "_id" ws  ":" ws  groupId:expressionValue ws accumulators:groupAccumulator* "}" { return {_id: groupId, accumulators: accumulators}; }
@@ -22,27 +22,34 @@ expressionValueSeparated
 groupOperator
   = "addToSet"i / "avg"i / "first"i / "last"i / "max"i / "min"i / "push"i / "sum"i
 
-matchCondition
-  = "{" ws condition:fieldCondition ws conditions:(ws "," ws fieldCondition)* ws "}" { return [condition, ...conditions]; }
-
-fieldCondition
-  = outputFieldName:outputField ws  ":" ws  "{" ws  expression:expression ws  "}" ws  { return { outputField: outputFieldName, ...expression }; }
-
 matchStage
-  = "{" ws "$and" ws ":" ws conditions:matchCondition ws "}" { return { type: "match", conditions }; }
+  =  conditions:(logicalOperatorCondition / matchCondition)*  { return {conditions}; }
 
-limitStage
-  = limit:number { return { limit }; }
+logicalOperatorCondition
+  = "{" ws "$" operator:("and"i / "or"i / "not"i) ws ":" ws "[" ws conditions:(logicalOperatorCondition / matchCondition)* ws "]" ws "}" { return { operator, conditions }; }
+
+matchCondition
+  = "{" ws fieldName:identifier ws  ":" ws condition:(comparisonOperator / simpleValue) ws "}" { return { fieldName, ...condition }; }
+
+comparisonOperator
+  = "{" ws "$" operator:("eq"i / "ne"i / "gt"i / "gte"i / "lt"i / "lte"i) ws ":" ws value:expressionValue ws "}" { return { operator, value }; }
+
+simpleValue
+  = expressionValue
+
+conditionSeparated
+  = ws "," ws condition:condition ws { return condition; }
+
+condition
+  = field:fieldReference ws  ":" ws  value:expressionValue { return { field, value }; }
 
 expressionValue
   = 
   fieldReference
   / expression
-  / '"' chars:[^"]* '"' { return chars.join(''); }
-  / "'" chars:[^']* "'" { return chars.join(''); }
-  / "true"i { return true; }
-  / "false"i { return false; }
-  / "null"i { return null; }
+  / string
+  / boolean
+  / null
   / number
   / expressionValueArray
 
@@ -64,6 +71,17 @@ identifier
 
 number
   = "-"? [0-9]+ ("." [0-9]+)? (("e"i / "E") ("+" / "-")? [0-9]+)? { return parseInt(text()); }
+
+string
+  = '"' chars:[^"]* '"' { return chars.join(''); }
+  / "'" chars:[^']* "'" { return chars.join(''); }
+
+boolean
+  = "true"i { return true; }
+  / "false"i { return false; }
+
+null
+  = "null"i { return null; }
 
 ws "whitespace"
   = [ \t\n\r]*
