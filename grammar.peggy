@@ -23,13 +23,21 @@ groupOperator
   = "addToSet"i / "avg"i / "first"i / "last"i / "max"i / "min"i / "push"i / "sum"i
 
 matchStage
-  =  conditions:(logicalOperatorCondition / matchCondition)*  { return {conditions}; }
+  =  conditions:matchConditionEnumeration*  { return {conditions}; }
 
 logicalOperatorCondition
-  = "{" ws "$" operator:("and"i / "or"i / "not"i) ws ":" ws "[" ws conditions:(logicalOperatorCondition / matchCondition)* ws "]" ws "}" { return { operator, conditions }; }
+  = "{" ws "$" operator:("and"i / "or"i / "not"i) ws ":" ws "[" ws conditions:matchConditionEnumeration* ws "]" ws "}" { return { operator, conditions }; }
+
+matchConditionEnumeration
+  = condition:matchCondition ws conditions:matchConditionSeparated* { return [condition, ...conditions]; }
+  / condition:logicalOperatorCondition ws conditions:matchConditionSeparated* { return [condition, ...conditions]; }
+
+matchConditionSeparated 
+  = ws "," ws condition:matchCondition ws { return condition; }
+  / ws "," ws condition:logicalOperatorCondition ws { return condition; }
 
 matchCondition
-  = "{" ws fieldName:identifier ws  ":" ws condition:(comparisonOperator / simpleValue) ws "}" { return { fieldName, ...condition }; }
+  = "{" ws fieldName:identifier ws  ":" ws condition:(logicalOperatorCondition / comparisonOperator / simpleValue) ws "}" { return { fieldName, condition }; }
 
 comparisonOperator
   = "{" ws "$" operator:("eq"i / "ne"i / "gt"i / "gte"i / "lt"i / "lte"i) ws ":" ws value:expressionValue ws "}" { return { operator, value }; }
@@ -61,13 +69,12 @@ expressionOperator
 
 fieldReference
   = '"$' chars:[^"]* '"' { return { field: chars.join('') } }
-  / identifier
 
 outputField
   = identifier
 
 identifier
-  = firstLetter:[a-zA-Z_] restLetters:[a-zA-Z0-9_]* { return firstLetter + restLetters.join(''); }
+  = '"'? firstLetter:[a-zA-Z_] restLetters:([a-zA-Z0-9_.])* '"'? { return firstLetter + restLetters.join(''); }
 
 number
   = "-"? [0-9]+ ("." [0-9]+)? (("e"i / "E") ("+" / "-")? [0-9]+)? { return parseInt(text()); }
