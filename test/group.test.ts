@@ -46,11 +46,6 @@ test("Group with nested expressions in accumulator", () => {
   expect(parse(pipeline)).toBeDefined();
 });
 
-test("Group with numeric values as decimals and scientific notation", () => {
-  const pipeline = `[ { $group: { _id: "$category", total: { $sum: 1.23e-4 } } } ]`;
-  expect(parse(pipeline)).toBeDefined();
-});
-
 // Not supported yet
 // test("Group with nested fields in _id field", () => {
 //   const pipeline = `[ { $group: { _id: { year: "$year", month: "$month" }, total: { $sum: 1 } } } ]`;

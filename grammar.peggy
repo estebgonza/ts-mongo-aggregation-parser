@@ -2,9 +2,18 @@ start
   = "[" ws stage:stage (ws "," ws stage)* ws "]" { return [stage]; }
 
 stage
-  = ws  "{" ws  "$" type:("group"i / "match"i) ws  ":" ws  stage:(groupStage / matchStage) ws  "}" { return {type, ...stage}; }
+  = groupStage / matchStage / limitStage
 
 groupStage
+  = "{" ws "$" type:"group"i ws ":" ws stage:groupStageContent ws "}" { return {type, ...stage}; }
+
+matchStage
+  = "{" ws "$" type:"match"i ws ":" ws stage:matchStageContent ws "}" { return {type, ...stage}; }
+
+limitStage
+  = "{" ws "$" type:"limit"i ws ":" ws stage:limitStageContent ws "}" { return {type, ...stage}; }
+
+groupStageContent
   = "{" ws  "_id" ws  ":" ws  groupId:expressionValue ws accumulators:groupAccumulator* "}" { return {_id: groupId, accumulators: accumulators}; }
 
 groupAccumulator
@@ -22,7 +31,7 @@ expressionValueSeparated
 groupOperator
   = "addToSet"i / "avg"i / "first"i / "last"i / "max"i / "min"i / "push"i / "sum"i
 
-matchStage
+matchStageContent
   =  conditions:matchConditionEnumeration*  { return {conditions}; }
 
 logicalOperatorCondition
@@ -38,6 +47,9 @@ matchConditionSeparated
 
 matchCondition
   = "{" ws fieldName:identifier ws  ":" ws condition:(logicalOperatorCondition / comparisonOperator / simpleValue) ws "}" { return { fieldName, condition }; }
+
+limitStageContent
+  = ws limitValue:positiveInteger ws { return { limit: limitValue }; }
 
 comparisonOperator
   = "{" ws "$" operator:("eq"i / "ne"i / "gt"i / "gte"i / "lt"i / "lte"i) ws ":" ws value:expressionValue ws "}" { return { operator, value }; }
@@ -77,8 +89,16 @@ identifier
   = '"'? firstLetter:[a-zA-Z_] restLetters:([a-zA-Z0-9_.])* '"'? { return firstLetter + restLetters.join(''); }
 
 number
-  = "-"? [0-9]+ ("." [0-9]+)? (("e"i / "E") ("+" / "-")? [0-9]+)? { return parseInt(text()); }
+  = integer / float
 
+positiveInteger
+  = [0-9]+ { return parseInt(text()); }
+
+integer
+  = "-"? [0-9]+ { return parseInt(text()); }
+
+float
+  = "-"? [0-9]+ "." [0-9]+ (("e"i / "E") ("+" / "-")? [0-9]+)? { return parseFloat(text()); }
 string
   = '"' chars:[^"]* '"' { return chars.join(''); }
   / "'" chars:[^']* "'" { return chars.join(''); }
