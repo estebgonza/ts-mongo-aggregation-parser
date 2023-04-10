@@ -1,4 +1,4 @@
-# ts-mongo-aggregation-parser [WIP]
+# ts-mongo-aggregation-parser
 
 [![Tests Status](https://github.com/estebgonza/ts-mongo-aggregation-parser/actions/workflows/tests.yaml/badge.svg)](https://github.com/estebgonza/ts-mongo-aggregation-parser/actions/workflows/tests.yaml/badge.svg)
 
