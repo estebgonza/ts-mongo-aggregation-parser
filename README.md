@@ -87,9 +87,3 @@ ast.accept(visitor)
 - [ ] $skip
 - [ ] $unwind
 - [ ] $sort
-
-## Roadmap
-
-- [x] Implement a visitor pattern
-- [ ] Support all aggregation operators
-- [ ] Support all stages
