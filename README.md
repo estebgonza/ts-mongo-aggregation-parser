@@ -6,6 +6,10 @@ This parser is generated using [pegjs](https://pegjs.org/). It parses a string c
 The AST Types are defined in [src/ast-types.ts](src/ast-types.ts).
 This package is compatible with CommonJS and ESM.
 
+## Motivations
+Allow [Maggregor](https://github.com/maggregor/maggregor) to parse request pipelines on MongoDB.
+Maggregor is a simple data-layer that speeds up MongoDB queries: https://github.com/maggregor/maggregor
+
 ## Installation
 
 ```bash
