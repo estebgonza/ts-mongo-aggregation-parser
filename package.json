@@ -58,7 +58,7 @@
   },
   "packageManager": "pnpm@7.33.6",
   "dependencies": {
-    "peggy": "^3.0.2",
+    "peggy": "^4.0.0",
     "ts-pegjs": "^3.1.0"
   }
 }
