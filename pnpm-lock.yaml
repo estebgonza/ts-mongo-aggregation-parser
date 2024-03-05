@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: false
@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   peggy:
-    specifier: ^3.0.2
-    version: 3.0.2
+    specifier: ^4.0.0
+    version: 4.0.0
   ts-pegjs:
     specifier: ^3.1.0
-    version: 3.1.0(peggy@3.0.2)
+    version: 3.1.0(peggy@4.0.0)
 
 devDependencies:
   '@sachinraja/eslint-config':
@@ -542,9 +542,9 @@ packages:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
 
-  /commander@10.0.0:
-    resolution: {integrity: sha512-zS5PnTI22FIRM6ylNW8G4Ap0IEOyk62fhLSD0+uHRT9McRCLGpkVNvao4bjimpK/GShynyQkFFxHhwMcETmduA==}
-    engines: {node: '>=14'}
+  /commander@12.0.0:
+    resolution: {integrity: sha512-MwVNWlYjDTtOjX5PiD7o5pK0UrFU/OYgcJfjjK4RaHZETNtjJqrZa9Y9ds88+A+f+d5lv+561eZ+yCKoS3gbAA==}
+    engines: {node: '>=18'}
     dev: false
 
   /commander@4.1.1:
@@ -1902,12 +1902,12 @@ packages:
     resolution: {integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==}
     dev: true
 
-  /peggy@3.0.2:
-    resolution: {integrity: sha512-n7chtCbEoGYRwZZ0i/O3t1cPr6o+d9Xx4Zwy2LYfzv0vjchMBU0tO+qYYyvZloBPcgRgzYvALzGWHe609JjEpg==}
-    engines: {node: '>=14'}
+  /peggy@4.0.0:
+    resolution: {integrity: sha512-fg9oKdoLSiP24lEsH+5vtYawR9v46a9sNikmYWPtORv+wZKqf9bFVMC5m8NWiTfRu6GaednL96YcmSmMcLY8Dg==}
+    engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      commander: 10.0.0
+      commander: 12.0.0
       source-map-generator: 0.8.0
     dev: false
 
@@ -2369,13 +2369,13 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-pegjs@3.1.0(peggy@3.0.2):
+  /ts-pegjs@3.1.0(peggy@4.0.0):
     resolution: {integrity: sha512-CZ80MYdzoh/setHAcrOdWh7ws4GsIPAahFEZ1019xPLe2snSzwuCLDAwQ0r7xHLIuOuRJ7v87jvz/Lr5YTLN4g==}
     hasBin: true
     peerDependencies:
       peggy: ^2.0.1
     dependencies:
-      peggy: 3.0.2
+      peggy: 4.0.0
     dev: false
 
   /tslib@1.14.1:
